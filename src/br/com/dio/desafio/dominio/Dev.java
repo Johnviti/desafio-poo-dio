@@ -2,7 +2,7 @@ package br.com.dio.desafio.dominio;
 
 import java.util.*;
 
-public class Dev {
+public class Dev implements Comparable<Dev>{
     private String nome;
     private Set<Conteudo> conteudosInscritos = new LinkedHashSet<>();
     private Set<Conteudo> conteudosConcluidos = new LinkedHashSet<>();
@@ -23,14 +23,7 @@ public class Dev {
     }
 
     public double calcularTotalXp() {
-        Iterator<Conteudo> iterator = this.conteudosConcluidos.iterator();
-        double soma = 0;
-        while(iterator.hasNext()){
-            double next = iterator.next().calcularXp();
-            soma += next;
-        }
-        return soma;
-
+        return this.conteudosConcluidos.stream().mapToDouble(Conteudo::calcularXp).sum();
         /*return this.conteudosConcluidos
                 .stream()
                 .mapToDouble(Conteudo::calcularXp)
@@ -73,5 +66,10 @@ public class Dev {
     @Override
     public int hashCode() {
         return Objects.hash(nome, conteudosInscritos, conteudosConcluidos);
+    }
+
+    @Override
+    public int compareTo(Dev outroDev) {
+        return Double.compare(outroDev.calcularTotalXp(), this.calcularTotalXp());
     }
 }
